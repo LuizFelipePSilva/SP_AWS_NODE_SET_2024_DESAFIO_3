@@ -4,6 +4,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   OneToMany,
+  DeleteDateColumn
 } from 'typeorm';
 import { Order } from '@modules/orders/infra/typeorm/entities/Order';
 import { IClient } from '@modules/clients/domain/models/IClient';
@@ -31,7 +32,7 @@ class Client implements IClient {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @DeleteDateColumn({ default: null })
   deletedAt: Date;
 
   @OneToMany(() => Order, (order) => order.client, { eager: true })

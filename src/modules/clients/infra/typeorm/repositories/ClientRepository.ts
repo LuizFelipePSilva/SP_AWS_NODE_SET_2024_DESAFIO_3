@@ -41,6 +41,10 @@ class ClientRepository implements IClientRepository {
     return client;
   }
 
+  public async delete(id: string): Promise<void> {
+    await this.ormRepository.softDelete(id);
+  }
+
   public async findByName(fullName: string): Promise<Client | undefined> {
     return this.ormRepository.findOne({
       where: {
@@ -85,7 +89,7 @@ class ClientRepository implements IClientRepository {
     const query = this.ormRepository.createQueryBuilder('client');
 
     // Filtros
-    if (params.c) {
+    if (params.fullname) {
       query.andWhere('client.nome LIKE :nome', {
         fullname: `%${params.fullname}%`,
       });
