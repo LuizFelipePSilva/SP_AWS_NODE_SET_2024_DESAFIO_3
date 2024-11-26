@@ -32,7 +32,7 @@ export class wCreateOrder1730153267365 implements MigrationInterface {
           { name: 'uf', type: 'varchar', isNullable: false },
           { name: 'totalValue', type: 'float', isNullable: false },
           { name: 'carId', type: 'uuid', isNullable: false },
-          { name: 'purchaseDate', type: 'timestamp', default: 'now()' },
+          { name: 'purchaseDate', type: 'timestamp', isNullable: true },
           { name: 'cancellationDate', type: 'timestamp', isNullable: true },
           { name: 'deletedAt', type: 'timestamp', isNullable: true },
         ],
