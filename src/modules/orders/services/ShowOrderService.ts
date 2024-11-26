@@ -61,7 +61,7 @@ class ShowOrderService {
       car: {
         id: carExist.id,
         plate: carExist.plate,
-        mark: carExist.mark,
+        brand: carExist.brand,
         model: carExist.model,
         km: carExist.km,
         year: carExist.year,
