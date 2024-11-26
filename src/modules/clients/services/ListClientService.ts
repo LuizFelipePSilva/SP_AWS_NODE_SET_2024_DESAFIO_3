@@ -1,8 +1,9 @@
 import { getCustomRepository } from 'typeorm';
-import Client from '../infra/typeorm/entities/Client';
+import { IShowClientParams } from '../domain/models/IShowClientParams';
+import { IClientPaginate } from '../domain/models/IClientPaginate';
 import ClientRepository from '../infra/typeorm/repositories/ClientRepository';
 import { inject, injectable } from 'tsyringe';
-
+import AppError from '@shared/errors/AppError';
 @injectable()
 class ListClientService {
   constructor(
@@ -10,17 +11,16 @@ class ListClientService {
     private clientRepository: ClientRepository
   ) {}
 
-  public async execute(p0: {
-    page: number;
-    size: number;
-    fullname: string;
-    email: string;
-    excluded: boolean | undefined;
-    orderBy: ('fullname' | 'createdAt' | 'deletedAt')[] | undefined;
-  }): Promise<Client[]> {
-    const clients = await this.clientRepository.find();
-    return clients;
+  public async execute(params: IShowClientParams): Promise<IClientPaginate> {
+    const result = await this.clientRepository.findAll(params);
+
+    if (result.data.length === 0) {
+      throw new AppError('Nenhum usuário encontrado');
+    }
+
+    return result;
   }
 }
+
 
 export default ListClientService;

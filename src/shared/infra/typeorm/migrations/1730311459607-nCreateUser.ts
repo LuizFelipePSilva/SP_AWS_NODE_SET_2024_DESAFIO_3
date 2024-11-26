@@ -8,7 +8,7 @@ export class nCreateUser1730142890438 implements MigrationInterface {
         columns: [
           { name: 'id', type: 'uuid', isPrimary: true },
           { name: 'fullName', type: 'varchar', isNullable: false },
-          { name: 'email', type: 'varchar', isUnique: true, isNullable: false },
+          { name: 'email', type: 'varchar', isNullable: false },
           { name: 'password', type: 'varchar', isNullable: false },
           { name: 'createdAt', type: 'timestamp', default: 'now()' },
           { name: 'deletedAt', type: 'timestamp', isNullable: true },

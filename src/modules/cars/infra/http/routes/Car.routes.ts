@@ -12,7 +12,7 @@ carRoute.post(
   celebrate({
     [Segments.BODY]: {
       plate: Joi.string().required(),
-      mark: Joi.string().required(),
+      brand: Joi.string().required(),
       model: Joi.string().required(),
       km: Joi.number().required(),
       year: Joi.number().required(),
@@ -73,7 +73,7 @@ carRoute.patch(
       year: Joi.number().integer().optional(),
       items: Joi.array().items(Joi.string()).max(5).optional(),
       price: Joi.number().optional(),
-      status: Joi.string().valid('Ativo', 'Inativo').optional(),
+      status: Joi.string().valid('ativo', 'inativo', 'excluido').optional(),
     },
   }),
   carController.update

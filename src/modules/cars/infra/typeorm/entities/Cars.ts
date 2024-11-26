@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   CreateDateColumn,
+  DeleteDateColumn
 } from 'typeorm';
 import CarItem from './CarItem';
 import { ICar } from '@modules/cars/domain/models/ICar';
@@ -24,7 +25,7 @@ class Cars {
   plate: string;
 
   @Column()
-  mark: string;
+  brand: string;
 
   @Column()
   model: string;
@@ -38,14 +39,20 @@ class Cars {
   @Column()
   price: number;
 
-  @Column({ type: 'enum', enum: statusEnum })
-  status: statusEnum;
+  @Column({
+    type: 'enum',
+    enum: ['ativo', 'inativo', 'excluído'],
+  })
+  status: 'ativo' | 'inativo' | 'excluído';
 
   @CreateDateColumn()
   createdAt: Date | null;
 
   @CreateDateColumn()
   updatedAt: Date | null;
+
+  @DeleteDateColumn({ default: null })
+  deletedAt: Date;
 
   @OneToMany(() => CarItem, (carItem) => carItem.cars, { cascade: true })
   items: CarItem[];

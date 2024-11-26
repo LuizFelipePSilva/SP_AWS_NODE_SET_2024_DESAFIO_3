@@ -1,18 +1,18 @@
 import CarItem from '@modules/cars/infra/typeorm/entities/CarItem';
-import { statusEnum } from '@modules/cars/infra/typeorm/entities/Cars';
 import { Order } from '@modules/orders/infra/typeorm/entities/Order';
 
 export interface ICar {
   id: string;
   plate: string;
-  mark: string;
+  brand: string;
   model: string;
   km: number;
   year: number;
   price: number;
-  status: statusEnum;
+  status: 'ativo' | 'inativo' | 'excluído'
   createdAt: Date | null;
   updatedAt: Date | null;
+  deletedAt: Date;
   items: CarItem[];
   orders: Order[];
 }

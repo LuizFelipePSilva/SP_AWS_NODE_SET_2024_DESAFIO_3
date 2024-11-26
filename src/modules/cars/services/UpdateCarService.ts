@@ -4,7 +4,6 @@ import Car from '@modules/cars/infra/typeorm/entities/Cars';
 import { ICarRepository } from '@modules/cars/domain/repositories/ICarRepository';
 import { ICarItemRepository } from '@modules/cars/domain/repositories/ICarItemRepository';
 import { IRequestUpdateCar } from '@modules/cars/domain/models/IRequestUpdateCar';
-import { statusEnum } from '@modules/cars/infra/typeorm/entities/Cars';
 
 @injectable()
 class UpdateCarService {
@@ -19,7 +18,7 @@ class UpdateCarService {
   public async execute({
     id,
     plate,
-    mark,
+    brand,
     model,
     km,
     year,
@@ -32,9 +31,7 @@ class UpdateCarService {
     if (!car) {
       throw new AppError('Carro não encontrado.');
     }
-
-    // Impede a atualização de carros com status "Excluído"
-    if (car.status == statusEnum.excluido) {
+    if (car.status == 'excluído') {
       throw new AppError(
         'Não é possível atualizar um carro com status "Excluido".'
       );
@@ -42,16 +39,16 @@ class UpdateCarService {
 
     // Atualiza os campos permitidos
     if (plate) car.plate = plate;
-    if (mark) car.mark = mark;
+    if (brand) car.brand = brand;
     if (model) car.model = model;
     if (typeof km === 'number') car.km = km;
     if (typeof year === 'number') car.year = year;
     if (typeof price === 'number') car.price = price;
 
     // Atualiza o status, se for válido (Ativo ou Inativo)
-    if (status && ['Ativo', 'Inativo'].includes(status)) {
-      if (status === 'Ativo') car.status = 0;
-      else if (status === 'Inativo') car.status = 1;
+    if (status && ['ativo', 'inativo'].includes(status)) {
+      if (status === 'ativo') car.status = 'ativo';
+      else if (status === 'inativo') car.status = 'inativo';
     }
 
     // Atualiza os itens do carro, se fornecidos

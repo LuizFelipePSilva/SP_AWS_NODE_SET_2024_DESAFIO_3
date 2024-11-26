@@ -3,9 +3,9 @@ import { ICarRepository } from '@modules/cars/domain/repositories/ICarRepository
 import { ICar } from '@modules/cars/domain/models/ICar';
 
 interface IRequest {
-  status?: 'Ativo' | 'Inativo';
+  status?: 'ativo' | 'inativo' | 'excluído';
   plateEnd?: string;
-  mark?: string;
+  brand?: string;
   model?: string;
   items?: string[];
   maxKm?: number;
@@ -36,7 +36,7 @@ class ListCarsService {
   public async execute({
     status,
     plateEnd,
-    mark,
+    brand,
     model,
     items,
     maxKm,
@@ -44,29 +44,61 @@ class ListCarsService {
     yearTo,
     priceMin,
     priceMax,
-    sortField,
-    sortOrder,
+    sortField = 'price',
+    sortOrder = 'asc',
     page,
     limit,
   }: IRequest): Promise<IResponse> {
-    const cars = await this.carRepository.findAllWithFilters({
-      status,
-      plateEnd,
-      mark,
-      model,
-      items,
-      maxKm,
-      yearFrom,
-      yearTo,
-      priceMin,
-      priceMax,
-      sortField,
-      sortOrder,
-      page,
-      limit,
+    const allCars = await this.carRepository.findAll(); // Busca todos os carros
+
+    // Filtragem
+    let filteredCars = allCars;
+
+    if (status) filteredCars = filteredCars.filter(car => car.status === status);
+    if (plateEnd)
+      filteredCars = filteredCars.filter(car => car.plate.endsWith(plateEnd));
+    if (brand) filteredCars = filteredCars.filter(car => car.brand === brand);
+    if (model) filteredCars = filteredCars.filter(car => car.model === model);
+    if (items && items.length > 0) {
+      filteredCars = filteredCars.filter(car =>
+        car.items.some(item => items.includes(item.name))
+      );
+    }
+    if (maxKm !== undefined)
+      filteredCars = filteredCars.filter(car => car.km <= maxKm);
+    if (yearFrom !== undefined)
+      filteredCars = filteredCars.filter(car => car.year >= yearFrom);
+    if (yearTo !== undefined)
+      filteredCars = filteredCars.filter(car => car.year <= yearTo);
+    if (priceMin !== undefined)
+      filteredCars = filteredCars.filter(car => car.price >= priceMin);
+    if (priceMax !== undefined)
+      filteredCars = filteredCars.filter(car => car.price <= priceMax);
+
+    // Ordenação
+    filteredCars.sort((a, b) => {
+      const fieldA = a[sortField as keyof ICar];
+      const fieldB = b[sortField as keyof ICar];
+
+      if (sortOrder === 'asc') {
+        return fieldA > fieldB ? 1 : -1;
+      }
+      return fieldA < fieldB ? 1 : -1;
     });
 
-    return cars;
+    // Paginação
+    const total = filteredCars.length;
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    const paginatedCars = filteredCars.slice(startIndex, endIndex);
+
+    return {
+      data: paginatedCars,
+      total,
+      page,
+      limit,
+    };
   }
 }
 

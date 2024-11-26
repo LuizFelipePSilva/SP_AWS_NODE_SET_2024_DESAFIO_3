@@ -27,7 +27,7 @@ export interface IShowOrderResponse {
   car: {
     id: string; // ID do carro
     plate: string; // Placa do carro
-    mark: string; // Marca do carro
+    brand: string; // Marca do carro
     model: string; // Modelo do carro
     km: number; // KM do carro
     year: number; // Ano do carro

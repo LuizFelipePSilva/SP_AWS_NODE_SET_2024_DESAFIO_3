@@ -1,13 +1,13 @@
-import { statusEnum } from '@modules/cars/infra/typeorm/entities/Cars';
+
 
 export interface ICreateCar {
   plate: string;
-  mark: string;
+  brand: string;
   model: string;
   km: number;
   year: number;
   price: number;
-  status: statusEnum;
+  status: 'ativo'| 'inativo' | 'excluído' ;
   createdAt: Date | null;
   updatedAt: Date | null;
 }

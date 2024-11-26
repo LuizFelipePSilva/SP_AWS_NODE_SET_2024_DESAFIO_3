@@ -1,8 +1,7 @@
-version: '3.8'
-
 services:
   db:
-    image: postgres:latest
+    image: postgres:15-alpine
+    container_name: testesapi
     environment:
       POSTGRES_USER: compassuser
       POSTGRES_PASSWORD: compasspass
@@ -13,9 +12,6 @@ services:
       - '5433:5432'
     networks:
       - compass_network
-
-volumes:
-  pgdata:
 
 networks:
   compass_network:

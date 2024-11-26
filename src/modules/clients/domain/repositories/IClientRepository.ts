@@ -3,6 +3,7 @@ import { IClient } from '../models/IClient';
 import { ICreateClient } from '../models/ICreateClient';
 
 export interface IClientRepository {
+  delete(id: string): Promise<void>;
   findByName(fullName: string): Promise<IClient | undefined>;
   findById(id: string): Promise<IClient | undefined>;
   findByEmail(email: string): Promise<IClient | undefined>;
