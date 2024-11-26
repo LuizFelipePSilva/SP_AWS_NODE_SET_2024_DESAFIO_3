@@ -3,7 +3,7 @@ import { ICarItem } from './ICarItem';
 
 export interface IRequestCreateCar {
   plate: string;
-  mark: string;
+  brand: string;
   model: string;
   km: number;
   year: number;

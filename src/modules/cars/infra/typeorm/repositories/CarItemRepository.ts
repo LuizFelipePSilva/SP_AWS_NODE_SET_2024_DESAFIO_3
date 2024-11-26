@@ -11,10 +11,7 @@ class CarItemRepository implements ICarItemRepository {
   }
 
   public async createMany(data: ICarItem[]): Promise<ICarItem[]> {
-    // Cria instâncias dos itens de carro a partir dos dados fornecidos
     const carItems = this.ormRepository.create(data);
-
-    // Salva todos os itens de uma vez
     await this.ormRepository.save(carItems);
 
     return carItems;

@@ -1,7 +1,7 @@
 export interface IRequestCar {
-  status?: 'Ativo' | 'Inativo';
+  status?: 'ativo' | 'inativo' | 'excluído';
   plateEnd?: string;
-  mark?: string;
+  brand?: string;
   model?: string;
   items?: string[];
   maxKm?: number;

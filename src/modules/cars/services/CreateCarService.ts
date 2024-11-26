@@ -17,7 +17,7 @@ class CreateCarService {
 
   public async execute({
     plate,
-    mark,
+    brand,
     model,
     km = 0,
     year,
@@ -41,16 +41,18 @@ class CreateCarService {
     if (uniqueItems.length > 5) {
       throw new AppError('O número máximo de itens é 5.');
     }
+    console.log('Items recebidos:', items);
+    console.log('Items únicos:', uniqueItems);
 
     // Criar o carro
     const car = await this.carRepository.create({
       plate,
-      mark,
+      brand,
       model,
       km,
       year,
       price,
-      status: statusEnum.ativo,
+      status: 'ativo',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -62,8 +64,8 @@ class CreateCarService {
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
-
-    await this.carItemRepository.createMany(carItems); // Método otimizado para criação em massa, se disponível
+    console.log('Recebendo items',carItems)
+    await this.carItemRepository.createMany(carItems);
 
     return car;
   }

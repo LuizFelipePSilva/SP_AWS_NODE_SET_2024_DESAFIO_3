@@ -2,9 +2,9 @@ import { ICar } from '../models/ICar';
 import { ICreateCar } from '../models/ICreateCar';
 
 export interface IFindAllWithFiltersParams {
-  status?: 'Ativo' | 'Inativo';
+  status?: 'ativo' | 'inativo' | 'excluído';
   plateEnd?: string;
-  mark?: string;
+  brand?: string;
   model?: string;
   items?: string[];
   maxKm?: number;
@@ -30,8 +30,6 @@ export interface ICarRepository {
   findByPlate(plate: string): Promise<ICar | null>;
   create(car: ICreateCar): Promise<ICar>;
   update(car: ICar): Promise<ICar>;
-  softDelete(id: string): Promise<void>;
-  findAllWithFilters(
-    params: IFindAllWithFiltersParams
-  ): Promise<IFindAllWithFiltersResponse>;
+  delete(id: string): Promise<void>;
+  findAll(): Promise<ICar[]>
 }

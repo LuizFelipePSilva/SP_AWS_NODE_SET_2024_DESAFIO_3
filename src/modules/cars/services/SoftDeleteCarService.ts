@@ -18,15 +18,15 @@ class SoftDeleteCarService {
     }
 
     // Verificar se o carro já está excluído
-    if (car.status == statusEnum.excluido) {
+    if (car.status === 'excluído') {
       throw new AppError('Carro já está excluído.', 400);
     }
 
     // Soft delete: Atualizar o status para "Excluído" e setar o updateAt com a data atual
-    car.status = statusEnum.excluido;
+    car.status = 'excluído'
     car.updatedAt = new Date();
 
-    await this.carRepository.softDelete(carId);
+    await this.carRepository.delete(carId);
 
     return car;
   }
