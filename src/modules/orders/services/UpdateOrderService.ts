@@ -30,7 +30,7 @@ class UpdateOrderService {
       throw new AppError('Data Hora Inicial não pode ser menor que hoje.');
     }
 
-    if (purchaseDate && orderDate && purchaseDate < orderDate) {
+    if (purchaseDate && orderDate && (purchaseDate < orderDate)) {
       throw new AppError(
         'Data Hora Final não pode ser menor que Data Hora Inicial.'
       );
@@ -41,7 +41,7 @@ class UpdateOrderService {
       const resp = await axios(`https://viacep.com.br/ws/${cep}/json/`);
       const cepData = await resp.data;
       if (cepData.erro) {
-        throw new AppError('CEP não encontrado.');
+        throw new AppError('CEP não encontrado.', 404);
       }
 
       uf = cepData.uf;
