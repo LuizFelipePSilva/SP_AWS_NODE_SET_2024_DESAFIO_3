@@ -9,38 +9,9 @@ import { instanceToInstance } from 'class-transformer';
 
 export default class UserController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const {
-      page = 1,
-      size = 10,
-      name,
-      email,
-      excluded,
-      orderBy,
-    } = request.query;
+    const listUsers = container.resolve(ListUsersService);
 
-    const pageNumber = Number(page);
-    const pageSize = Number(size);
-    const isExcluded = excluded ? excluded === 'true' : undefined;
-
-    const allowedOrderFields = ['name', 'createdAt', 'deletedAt'] as const;
-    type OrderField = typeof allowedOrderFields[number];
-
-    const orderFields = orderBy
-      ? ((orderBy as string[]).filter((field) =>
-          allowedOrderFields.includes(field as OrderField)
-        ) as OrderField[])
-      : undefined;
-
-    const userRepository = container.resolve(ListUsersService);
-
-    const users = await userRepository.execute({
-      page: pageNumber,
-      size: pageSize,
-      name: name as string,
-      email: email as string,
-      excluded: isExcluded,
-      orderBy: orderFields,
-    });
+    const users = await listUsers.execute(request.query);
 
     return response.json(instanceToInstance(users));
   }

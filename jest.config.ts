@@ -1,6 +1,7 @@
-import type { Config } from '@jest/types';
+import { pathsToModuleNameMapper } from 'ts-jest';
+import { compilerOptions } from './tsconfig.json';
 
-const config: Config.InitialOptions = {
+const config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   globals: {
@@ -8,13 +9,15 @@ const config: Config.InitialOptions = {
       isolatedModules: true,
     },
   },
+  rootDir: './',
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
-  testMatch: ['**/src/**/*.spec.ts'], // onde os testes ficam
+  testMatch: ['**/test/**/*.spec.ts'],
   moduleFileExtensions: ['ts', 'js', 'json'],
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.{ts,js}', '!src/**/*.spec.ts'],
+  collectCoverageFrom: ['src/**/{infra,services}/**/*.{ts,js}'],
   coverageDirectory: 'coverage',
 };
 

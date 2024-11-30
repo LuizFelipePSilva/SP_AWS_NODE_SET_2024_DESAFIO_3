@@ -4,7 +4,7 @@ import { ICreateClient } from '../domain/models/ICreateClient';
 import { IClient } from '../domain/models/IClient';
 import { inject, injectable } from 'tsyringe';
 
-function isValidCPF(cpf: string): boolean {
+export function isValidCPF(cpf: string): boolean {
   // Remove caracteres que não tem numéricos
   cpf = cpf.replace(/[^\d]+/g, '');
 
@@ -68,7 +68,10 @@ class CreateClientService {
     if (cpfExists) {
       throw new AppError('CPF already used.');
     }
-
+    if(!fullName || !email || !cpf || !birthDate || !phone) {
+      throw new AppError('need all parameters.')
+    }
+  
     const client = await this.clientRepository.create({
       fullName,
       email,

@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { ICarRepository } from '@modules/cars/domain/repositories/ICarRepository';
 import { ICar } from '@modules/cars/domain/models/ICar';
+import AppError from '@shared/errors/AppError';
 
 interface IRequest {
   status?: 'ativo' | 'inativo' | 'excluído';
@@ -74,6 +75,10 @@ class ListCarsService {
       filteredCars = filteredCars.filter(car => car.price >= priceMin);
     if (priceMax !== undefined)
       filteredCars = filteredCars.filter(car => car.price <= priceMax);
+
+    if (filteredCars.length === 0) {
+      throw new AppError('Nenhum carro encontrado');
+    }
 
     // Ordenação
     filteredCars.sort((a, b) => {

@@ -65,7 +65,7 @@ class ShowOrderService {
         model: carExist.model,
         km: carExist.km,
         year: carExist.year,
-        items: carExist.items.map((item) => ({ name: item.name })), // Adapta os itens do carro
+        items: (carExist.items || []).map((item) => ({ name: item.name })), // Adapta os itens do carro
       },
     };
   }
