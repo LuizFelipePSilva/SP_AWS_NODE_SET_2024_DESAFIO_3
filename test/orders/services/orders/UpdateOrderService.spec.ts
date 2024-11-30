@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe("ShowOrderService", () => {
+describe("UpdateOrderService", () => {
   let updateOrderService: UpdateOrderService;
 
   const mockOrderRepository: jest.Mocked<IOrderRepository> = {
@@ -26,7 +26,6 @@ describe("ShowOrderService", () => {
     );
   });
 
-  describe('UpdateOrderService', () => {
     it('Order not found', async () => {
       mockOrderRepository.findById.mockResolvedValue(null);
   
@@ -47,7 +46,7 @@ describe("ShowOrderService", () => {
       await expect(
         updateOrderService.execute({
           id:'1', 
-          orderDate: new Date('2024-11-29'), 
+          orderDate: new Date('2030-11-29'), 
           purchaseDate: new Date('2023-01-01')
         })
       ).rejects.toThrow(new AppError('Data Hora Final não pode ser menor que Data Hora Inicial.'))
@@ -166,4 +165,3 @@ describe("ShowOrderService", () => {
         expect(mockOrderRepository.update).toHaveBeenCalledTimes(2);
       });
   });
-});
