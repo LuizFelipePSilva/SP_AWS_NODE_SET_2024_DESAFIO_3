@@ -41,9 +41,6 @@ class CreateCarService {
     if (uniqueItems.length > 5) {
       throw new AppError('O número máximo de itens é 5.');
     }
-    console.log('Items recebidos:', items);
-    console.log('Items únicos:', uniqueItems);
-
     // Criar o carro
     const car = await this.carRepository.create({
       plate,
@@ -64,7 +61,6 @@ class CreateCarService {
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
-    console.log('Recebendo items',carItems)
     await this.carItemRepository.createMany(carItems);
 
     return car;
