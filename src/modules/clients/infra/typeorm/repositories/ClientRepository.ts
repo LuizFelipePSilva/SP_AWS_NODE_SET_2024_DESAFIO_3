@@ -6,6 +6,15 @@ import { ICreateClient } from '@modules/clients/domain/models/ICreateClient';
 import { IShowClientParams } from '@modules/clients/domain/models/IShowClientParams';
 import { IClientPaginate } from '@modules/clients/domain/models/IClientPaginate';
 
+interface IFindAllParams {
+  page: number;
+  size: number;
+  fullname?: string;
+  email?: string;
+  excluded?: boolean;
+  orderBy?: string[];
+}
+
 class ClientRepository implements IClientRepository {
   [x: string]: any;
 
@@ -85,54 +94,38 @@ class ClientRepository implements IClientRepository {
     });
   }
 
-  public async findAll(params: IShowClientParams): Promise<IClientPaginate> {
-    const query = this.ormRepository.createQueryBuilder('client');
+  public async findAll(params: IFindAllParams) {
+    const { page, size, fullname, email, excluded, orderBy } = params;
 
-    // Filtros
-    if (params.fullname) {
-      query.andWhere('client.nome LIKE :nome', {
-        fullname: `%${params.fullname}%`,
-      });
-    }
-    if (params.email) {
-      query.andWhere('client.email LIKE :email', {
-        email: `%${params.email}%`,
-      });
-    }
-    if (params.cpf) {
-      query.andWhere('client.email LIKE :cpf', { cpf: `%${params.cpf}%` });
-    }
-    if (params.excluded !== undefined) {
-      if (params.excluded) {
-        query.andWhere('client.excluded IS NOT NULL');
-      } else {
-        query.andWhere('client.dataExclusao IS NULL');
-      }
+    const query = this.createQueryBuilder('client')
+      .skip((page - 1) * size)
+      .take(size);
+
+    if (fullname) {
+      query.andWhere('client.fullname ILIKE :fullname', { fullname: `%${fullname}%` });
     }
 
-    // Ordenação por múltiplos campos permitidos
-    if (params.orderBy) {
-      params.orderBy.forEach((campo) => {
-        if (['fullname', 'createAt', 'deletedAt'].includes(campo)) {
-          query.addOrderBy(`client.${campo}`);
-        }
+    if (email) {
+      query.andWhere('client.email ILIKE :email', { email: `%${email}%` });
+    }
+
+    if (excluded !== undefined) {
+      query.andWhere('client.deletedAt IS NOT NULL = :excluded', { excluded });
+    }
+
+    if (orderBy && orderBy.length > 0) {
+      orderBy.forEach((field) => {
+        query.addOrderBy(`client.${field}`);
       });
     }
 
-    // Paginação
-    const current_page = params.page ?? 1;
-    const clientsPerPage = params.size ?? 10;
-    const totalClients = await query.getCount();
-    query.skip((current_page - 1) * clientsPerPage).take(clientsPerPage);
-
-    // Execução da consulta
-    const clients = await query.getMany();
+    const [data, total] = await query.getManyAndCount();
 
     return {
-      quant_pages: Math.ceil(totalClients / clientsPerPage),
-      totalClients: totalClients,
-      current_page: current_page,
-      data: clients,
+      data,
+      total,
+      page,
+      size,
     };
   }
 }
