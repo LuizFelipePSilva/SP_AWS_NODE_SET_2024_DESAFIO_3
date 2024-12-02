@@ -4,8 +4,9 @@
     "lib": ["ES6"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "ESNext",
+    "module": "commonjs",
     "rootDir": "./",
+    "strictPropertyInitialization": false,
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
@@ -18,7 +19,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true
   },

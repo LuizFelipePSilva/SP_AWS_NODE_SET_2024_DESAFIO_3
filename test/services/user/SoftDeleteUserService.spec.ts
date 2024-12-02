@@ -5,7 +5,7 @@ import { IHashProvider } from "@modules/users/providers/HashProvider/models/IHas
 import AppError from "@shared/errors/AppError";
 
 
-describe("CreateUserService", () => {
+describe("DeleteUserService", () => {
   let softDeleteUserService: SoftDeleteUserService;
 
   const mockUserRepository: jest.Mocked<IUserRepository> = {
@@ -24,7 +24,7 @@ describe("CreateUserService", () => {
     );
   });
 
-  it('user not found id', async () => {
+  it('should throw error if id not found', async () => {
     mockUserRepository.findById.mockResolvedValue(null)
 
    await expect(
@@ -34,7 +34,7 @@ describe("CreateUserService", () => {
     ).rejects.toThrow(new AppError('Usuário não encontrado'))
   })
 
-  it('user found id', async () => { 
+  it('should find user successfully', async () => { 
     mockUserRepository.findById.mockResolvedValue({id: '1'})
 
    const result = await softDeleteUserService.execute({id: '1'})

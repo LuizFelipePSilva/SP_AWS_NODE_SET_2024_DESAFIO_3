@@ -23,20 +23,20 @@ describe("CreateClientService", () => {
       mockClientRepository as any,
     );
   }); 
-  it('Cpf not valid', async () => {
+  it('should throw an error if cpf are invalid', async () => {
     expect(
       createClientService.execute({cpf: "12345678900"})
     ).rejects.toThrow(new AppError('Invalid CPF.'))
   })
 
-  it('email already used', async () => {
+  it('should throw an error if email already used', async () => {
     mockClientRepository.findByEmail.mockResolvedValue({email: 'felipe12@gmail.com'})
     expect(
       createClientService.execute({email: 'felipe12@gmail.com', cpf: "22915309094"})
     ).rejects.toThrow(new AppError('Email address already used.'))
   })
 
-  it('cpf already used', async () => {
+  it('should throw an error if cpf already used', async () => {
     mockClientRepository.findByEmail.mockResolvedValue(null)
     mockClientRepository.findByCPF.mockResolvedValue({cpf: "22915309094"})
     expect(
@@ -44,7 +44,7 @@ describe("CreateClientService", () => {
     ).rejects.toThrow(new AppError('CPF already used.'))
   })
 
-  it('need all parameters', async () => {
+  it('should throw an error if all parameters not filled', async () => {
     mockClientRepository.findByEmail.mockResolvedValue(null)
     mockClientRepository.findByCPF.mockResolvedValue(null)
     expect(
@@ -52,7 +52,7 @@ describe("CreateClientService", () => {
     ).rejects.toThrow(new AppError('need all parameters.'))
   })
 
-  it('create sucess', async () => {
+  it('should create a client successfully', async () => {
     mockClientRepository.findByEmail.mockResolvedValue(null)
     mockClientRepository.findByCPF.mockResolvedValue(null)
 

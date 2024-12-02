@@ -30,7 +30,7 @@ describe("FindCarService", () => {
     ).rejects.toThrow(new AppError('Carro não encontrado.', 404))
   })
 
-  it('find sucess', async () => {
+  it('should find car successfully', async () => {
     mockCarRepository.findById.mockResolvedValue({id: '1'})
     const result = await showCarService.execute({ìd: '1'})
 

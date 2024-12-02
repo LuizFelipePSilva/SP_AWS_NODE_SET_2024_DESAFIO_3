@@ -38,7 +38,7 @@ describe("DeleteCarService", () => {
     ).rejects.toThrow(new AppError('Carro já está excluído.', 400)) 
   })
 
-  it('delete sucess', async () => {
+  it('should delete a car successfully', async () => {
     mockCarRepository.findById.mockResolvedValue({id: '1'})
     const result = await softDeleteCarService.execute({ìd: '1'})
 

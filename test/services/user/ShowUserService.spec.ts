@@ -3,7 +3,7 @@ import { IUserRepository } from '@modules/users/domain/repositories/IUserReposit
 import ListUsersService from '@modules/users/services/ShowUsers';
 import AppError from '@shared/errors/AppError';
 
-describe('ListUsersService', () => {
+describe('ShowUsersService', () => {
   let listUsersService: ListUsersService;
   const mockUserRepository: jest.Mocked<IUserRepository> = {
     findById: jest.fn(),

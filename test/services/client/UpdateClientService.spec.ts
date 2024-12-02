@@ -24,14 +24,14 @@ describe("UpdateClientService", () => {
       mockClientRepository as any,
     );
   }); 
-  it('client not found by id', async () => {
+  it('should throw an error if id not found', async () => {
     mockClientRepository.findById.mockResolvedValue(null)
 
     expect(
       updateClientService.execute({id: '1'})
     ).rejects.toThrow(new AppError('Client not found.'))
   })
-  it('client is register by email', async () => {
+  it('should throw an error if email already used', async () => {
     mockClientRepository.findById.mockResolvedValue({ìd: '1', email: 'felipe2@gmail.com'})
     mockClientRepository.findByEmail.mockResolvedValue({email: 'felipe1@gmail.com'})
 
@@ -40,7 +40,7 @@ describe("UpdateClientService", () => {
     ).rejects.toThrow(new AppError('There is already one client with this email.'))
   })
 
-  it('client is register by cpf', async () => {
+  it('should throw an error if cpf already used', async () => {
     mockClientRepository.findById.mockResolvedValue({ìd: '1', email: 'felipe2@gmail.com', cpf: '12345678910'})
     mockClientRepository.findByEmail.mockResolvedValue(null)
     mockClientRepository.findByCPF.mockResolvedValue({cpf: '12345678911'})
@@ -50,7 +50,7 @@ describe("UpdateClientService", () => {
     ).rejects.toThrow(new AppError('There is already one client with this CPF.'))
   })
 
-  it('client updated total', async () => {
+  it('should update a client successfully', async () => {
     mockClientRepository.findById.mockResolvedValue({id: '1', email: 'felipe2@gmail.com', cpf: '12345678910'})
     mockClientRepository.findByEmail.mockResolvedValue(null)
     mockClientRepository.findByCPF.mockResolvedValue(null)
@@ -75,7 +75,7 @@ describe("UpdateClientService", () => {
       })
 
   })
-  it('client uptade nothing', async () => {
+  it('should update client successfully', async () => {
     mockClientRepository.findById.mockResolvedValue({
       id: '1',
       email: 'felipe2@gmail.com', 

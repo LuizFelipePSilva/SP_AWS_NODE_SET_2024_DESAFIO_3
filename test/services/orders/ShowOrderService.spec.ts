@@ -45,7 +45,7 @@ describe("ShowOrderService", () => {
     );
   });
 
-  it('Order not found', async () => {
+  it('should throw error if order not found', async () => {
       mockOrderRepository.findById.mockResolvedValue(null);
     
       await expect(
@@ -54,7 +54,7 @@ describe("ShowOrderService", () => {
   })
 
 
-  it('Client not found', async () => {
+  it('should throw error if client not found', async () => {
     mockOrderRepository.findById.mockResolvedValue({id: '1', carId: '1', clientId: '1'});
     mockClientRepository.findById.mockResolvedValue(null)
 
@@ -64,7 +64,7 @@ describe("ShowOrderService", () => {
 })
 
 
-it('Car not found', async () => {
+it('should throw error if car not found', async () => {
   mockOrderRepository.findById.mockResolvedValue({id: '1', carId: '1', clientId: '1'});
   mockClientRepository.findById.mockResolvedValue({
     id: '1'
@@ -76,8 +76,7 @@ it('Car not found', async () => {
   ).rejects.toThrow(new AppError('Car not found.', 400))
 })
 
-it("should show an order by ID", async () => {
-  // Mock do pedido
+it("should show orders successfully", async () => {
   mockOrderRepository.findById.mockResolvedValue({
     id: '1',
     carId: "1",
@@ -94,7 +93,6 @@ it("should show an order by ID", async () => {
     status: 'Aberto'
   });
 
-  // Mock do cliente associado ao pedido
   mockClientRepository.findById.mockResolvedValue({
     id: "1",
     fullName: "John Doe",
@@ -102,7 +100,6 @@ it("should show an order by ID", async () => {
     email: "john.doe@example.com",
   });
 
-  // Mock do carro associado ao pedido
   mockCarRepository.findById.mockResolvedValue({
     id: "1",
     model: "Tesla Model S",

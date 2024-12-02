@@ -26,7 +26,7 @@ describe("UpdateOrderService", () => {
     );
   });
 
-    it('Order not found', async () => {
+    it('should throw an error if id not found', async () => {
       mockOrderRepository.findById.mockResolvedValue(null);
   
       await expect(
@@ -34,14 +34,14 @@ describe("UpdateOrderService", () => {
       ).rejects.toThrow(new AppError('Order not found.', 400))
     })
 
-    it('Order update date not grandiest for atual date', async () => {
+    it('should throw error if order update date is not the bigger for actual date', async () => {
     mockOrderRepository.findById.mockResolvedValue({id: '1', orderDate: new Date('2024-01-10')});
     await expect(
       updateOrderService.execute({id:'1', orderDate: new Date('2023-01-10')})
     ).rejects.toThrow(new AppError('Data Hora Inicial não pode ser menor que hoje.'))
     })
 
-    it('Order update Purchase date', async () => {
+    it('should throw error if order update purchase date is not the bigger for actual date', async () => {
       mockOrderRepository.findById.mockResolvedValue({id: '1', orderDate: new Date('2024-01-10')});
       await expect(
         updateOrderService.execute({
@@ -52,7 +52,7 @@ describe("UpdateOrderService", () => {
       ).rejects.toThrow(new AppError('Data Hora Final não pode ser menor que Data Hora Inicial.'))
       });
 
-    it('deve lançar um erro se o CEP não for encontrado', async () => {
+    it('should throw error if cpf not found', async () => {
       mockedAxios.mockResolvedValue({
         data: {
           erro: true,
@@ -70,7 +70,7 @@ describe("UpdateOrderService", () => {
     });
 
 
-    it('ksadkasd', async () => {
+    it('should throw error if not fillials in region', async () => {
       mockedAxios.mockResolvedValue({
         data: {
           uf: 'SP',
@@ -88,7 +88,7 @@ describe("UpdateOrderService", () => {
       ).rejects.toThrow(new AppError('No momento não temos filiais nessa região.'));
     })
 
-    it('Order status to cancelado', async () => {
+    it('should throw error if order status is aprovado', async () => {
       mockOrderRepository.findById.mockResolvedValue({id: '1', status: "Aprovado"});
       await expect(
         updateOrderService.execute({
@@ -98,7 +98,7 @@ describe("UpdateOrderService", () => {
       ).rejects.toThrow(new AppError('Apenas pedidos abertos podem ser cancelados.'))
       }); 
 
-    it('Order status to Aprovado', async () => {
+    it('should throw error if order status is aprovado', async () => {
         mockOrderRepository.findById.mockResolvedValue({id: '1', status: "Aprovado"});
         await expect(
           updateOrderService.execute({
@@ -107,7 +107,7 @@ describe("UpdateOrderService", () => {
           })
         ).rejects.toThrow(new AppError('Apenas pedidos abertos podem ser aprovados.'))
       })
-      it('Update order', async () => {
+      it('should update order successfully', async () => {
         mockOrderRepository.findById.mockResolvedValue({
           id: '1',
           status: 'Aberto',
@@ -131,7 +131,7 @@ describe("UpdateOrderService", () => {
         expect(result.uf).toBe('RN');
         expect(mockOrderRepository.update).toHaveBeenCalledTimes(1);
       });
-      it('Order status to Aprovado', async () => {
+      it('should throw error if status not "aberto"', async () => {
         mockOrderRepository.findById.mockResolvedValue({id: '1', status: "Aprovado"});
         await expect(
           updateOrderService.execute({
@@ -140,7 +140,7 @@ describe("UpdateOrderService", () => {
           })
         ).rejects.toThrow(new AppError('Apenas pedidos abertos podem ser aprovados.'))
       })
-      it('Update order', async () => {
+      it('should update client successfully', async () => {
         mockOrderRepository.findById.mockResolvedValue({
           id: '1',
           status: 'Aberto',

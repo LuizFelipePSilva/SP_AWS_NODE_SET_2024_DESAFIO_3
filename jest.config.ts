@@ -17,8 +17,9 @@ const config = {
   moduleFileExtensions: ['ts', 'js', 'json'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/{infra,services}/**/*.{ts,js}'],
+  collectCoverageFrom: ['src/**/http/**/**/*.{ts,js}', 'src/**/services/**/*.{ts,js}', 'src/**/errors/**/**/*.{ts,js}'],
   coverageDirectory: 'coverage',
+  setupFiles: ['reflect-metadata'],
 };
 
 export default config;
