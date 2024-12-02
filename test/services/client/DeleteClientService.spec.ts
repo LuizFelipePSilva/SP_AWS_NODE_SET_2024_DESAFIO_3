@@ -24,7 +24,7 @@ describe("DeleteClientService", () => {
       mockClientRepository as any,
     );
   }); 
-    it('Client not found id ', async () => {
+    it('should throw an error if id not found', async () => {
       mockClientRepository.findById.mockResolvedValue(null)
 
       await expect(
@@ -34,7 +34,7 @@ describe("DeleteClientService", () => {
       ).rejects.toThrow(new AppError('Client not found.', 400))
     });
 
-    it('Client deleted', async () => {
+    it('should delete client successfully', async () => {
       mockClientRepository.findById.mockResolvedValue({id: '1'})
 
       const result = await deleteClientService.execute({id: '1'})

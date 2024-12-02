@@ -5,7 +5,7 @@ import { IOrderRepository } from "@modules/orders/domain/repositories/IOrderRepo
 import AppError from "@shared/errors/AppError";
 import SoftDeleteOrderService from "@modules/orders/services/SoftDeleteOrder";
 
-describe("SoftDelete", () => {
+describe("SoftDeleteOrder", () => {
   let softDeleteOrderService: SoftDeleteOrderService;
   const mockOrderRepository: jest.Mocked<IOrderRepository> = {
     findById: jest.fn(),
@@ -21,14 +21,14 @@ describe("SoftDelete", () => {
       mockOrderRepository as any,
     );
   });
-  it('Order not found', async () => {
+  it('should throw error if id not found', async () => {
     mockOrderRepository.findById.mockResolvedValue(null);
   
     await expect(
       softDeleteOrderService.execute({id: '1'})
     ).rejects.toThrow(new AppError('Order not found.', 400))
 })
-it('Order found', async () => {
+it('should delete order successfully', async () => {
   mockOrderRepository.findById.mockResolvedValue({id: 1});
 
   const result = await softDeleteOrderService.execute({id: '1'})

@@ -5,7 +5,7 @@ import { IHashProvider } from "@modules/users/providers/HashProvider/models/IHas
 import AppError from "@shared/errors/AppError";
 
 
-describe("CreateUserService", () => {
+describe("UpdateUserService", () => {
   let updateUserService: UpdateUserService;
 
   const mockUserRepository: jest.Mocked<IUserRepository> = {
@@ -28,7 +28,7 @@ describe("CreateUserService", () => {
     );
   });
 
-  it('user not found id', async () => {
+  it('should throw error if id not found', async () => {
     mockUserRepository.findById.mockResolvedValue(null)
 
    await expect(
@@ -38,7 +38,7 @@ describe("CreateUserService", () => {
     ).rejects.toThrow(new AppError('Usuário não encontrado'))
   })
 
-  it('user not found id', async () => {
+  it('should throw error if email already used', async () => {
     mockUserRepository.findByEmail.mockResolvedValue({email: "felipepe@gmail.com"})
     mockUserRepository.findById.mockResolvedValue({id: '1'})
 
@@ -50,7 +50,7 @@ describe("CreateUserService", () => {
     ).rejects.toThrow(new AppError('Endereço de email em uso'))
   })
 
-  it('send user to update', async () => {
+  it('should update user successfully', async () => {
     const password = 'password'
     mockUserRepository.findByEmail.mockResolvedValue(null)
     mockUserRepository.findById.mockResolvedValue({id: '1'})

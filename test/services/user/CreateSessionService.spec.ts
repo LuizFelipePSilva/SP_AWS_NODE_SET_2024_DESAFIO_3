@@ -11,7 +11,7 @@ jest.mock("jsonwebtoken", () => ({
 }));
 
 
-describe("CreateUserService", () => {
+describe("CreateSessionService", () => {
   let createSessionUserService: CreateSessionService;
 
   const mockUserRepository: jest.Mocked<IUserRepository> = {
@@ -35,7 +35,7 @@ describe("CreateUserService", () => {
     );
   });
 
-  it('user not found id', async () => {
+  it('should throw error if id not found', async () => {
     mockUserRepository.findByEmail.mockResolvedValue(null)
 
    await expect( 
@@ -45,7 +45,7 @@ describe("CreateUserService", () => {
     ).rejects.toThrow(new AppError('Incorrect email/password combination.', 401))
   })
 
-  it('Password wrong', async () => {
+  it('should throw error if password', async () => {
     mockUserRepository.findByEmail.mockResolvedValue(
       {
         id: '1', 
@@ -65,9 +65,8 @@ describe("CreateUserService", () => {
   it('should successfully authenticate and return token', async () => {
     const user = { id: '1', email: 'felipepe@gmail.com', password: 'hashedpassword' };
     mockUserRepository.findByEmail.mockResolvedValue(user);
-    mockHashProvider.compareHash.mockResolvedValue(true); // Senha confirmada
+    mockHashProvider.compareHash.mockResolvedValue(true); 
 
-    // Mocking JWT token creation
     const mockToken = 'mocked.jwt.token';
     (sign as jest.Mock).mockReturnValue(mockToken);
 

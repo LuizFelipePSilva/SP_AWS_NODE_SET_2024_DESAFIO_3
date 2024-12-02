@@ -29,7 +29,7 @@ describe("CreateUserService", () => {
       mockHashProvider as any
     );
   });
-  it('Email found', async () => {
+  it('should throw error if email already used', async () => {
     mockUserRepository.findByEmail.mockResolvedValue({email: 'felipepe@gmail.com'})
 
     await expect(
@@ -39,7 +39,7 @@ describe("CreateUserService", () => {
     ).rejects.toThrow(new AppError('Endereço de email já cadastrado'))
   })
 
-  it('Name not request', async () => {
+  it('should throw error if name not request', async () => {
     mockUserRepository.findByEmail.mockResolvedValue(null)
 
     await expect(
@@ -49,7 +49,7 @@ describe("CreateUserService", () => {
     ).rejects.toThrow(new AppError('Informe seu nome'))
   })
 
-  it('Password not request', async () => {
+  it('should throw error if password not request', async () => {
     mockUserRepository.findByEmail.mockResolvedValue(null)
 
     await expect(
@@ -60,7 +60,7 @@ describe("CreateUserService", () => {
     ).rejects.toThrow(new AppError('Informe uma senha'))
   })
 
-  it('Password hashed', async () => {
+  it('should create user successfully', async () => {
     const password = '1234567890'
     mockUserRepository.findByEmail.mockResolvedValue(null)
     mockHashProvider.generateHash.mockResolvedValue('Reservado123')

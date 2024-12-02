@@ -47,7 +47,7 @@ describe("CreateOrderService", () => {
       mockCarRepository as any
     );
   });
-  it("shloud throw if the client not exist", async () => {
+  it("shoud throw if the client not exist", async () => {
     mockClientRepository.findById.mockResolvedValue(null)
     mockCarRepository.findById.mockResolvedValue({id: "1"});  
     mockOrderRepository.findByClient.mockResolvedValue([]);
@@ -99,7 +99,7 @@ describe("CreateOrderService", () => {
     ).rejects.toThrow(new AppError('Carro não existe', 400)); 
   });
 
-  it("cep não foi informado", async () => {
+  it("should throw an error if cep not informed", async () => {
     mockCarRepository.findById.mockResolvedValue({id: "1"});  
     mockClientRepository.findById.mockResolvedValue({
       id: "1",
@@ -159,7 +159,6 @@ describe("CreateOrderService", () => {
       value: 100,
     };
   
-    // Simula a criação de uma ordem com ID mockado
     mockOrderRepository.create.mockResolvedValue({
       id: "123",
       clientId: "1",
@@ -197,7 +196,6 @@ describe("CreateOrderService", () => {
       cancellationDate: null,
     });
   
-    // Verifica se o resultado retornado é o esperado
     expect(result).toEqual({
       id: "123",
       clientId: "1",

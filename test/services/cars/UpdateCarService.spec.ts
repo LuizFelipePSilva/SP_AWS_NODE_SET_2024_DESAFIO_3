@@ -50,7 +50,7 @@ describe("CreateCarService", () => {
       updateCarService.execute({ìd: '1'})
     ).rejects.toThrow(new AppError('Não é possível atualizar um carro com status "Excluido".', 400)) 
   })
-  it('update car', async () => {
+  it('should update a car successfully', async () => {
     mockCarRepository.findById.mockResolvedValue({id: '1', status: "ativo"})
 
     const result = await updateCarService.execute({
@@ -76,7 +76,7 @@ describe("CreateCarService", () => {
       updatedAt: expect.any(Date)
     })
   })
-  it('update car status inativo', async () => {
+  it('should update a car successfully and status inativo', async () => {
     mockCarRepository.findById.mockResolvedValue({id: '1', status: "ativo"})
 
     const result = await updateCarService.execute({

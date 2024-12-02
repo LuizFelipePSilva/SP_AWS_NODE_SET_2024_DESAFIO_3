@@ -25,7 +25,7 @@ describe("FindClientService", () => {
     );
   }); 
 
-    it('client not found by id', async () => {
+    it('should throw an error if id not found', async () => {
       mockClientRepository.findById.mockResolvedValue(null)
 
       expect(
@@ -33,7 +33,7 @@ describe("FindClientService", () => {
       ).rejects.toThrow(new AppError('Client not found.'))
     })
 
-    it('client found', async () => {
+    it('should find a client successfully', async () => {
       mockClientRepository.findById.mockResolvedValue({id: '1', birthDate: new Date('2004-01-01')})
 
       const result = await showClientService.execute({id: '1'})
