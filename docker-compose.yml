@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   db:
     image: postgres:15-alpine
@@ -10,6 +12,27 @@ services:
       - ./.docker/dbdata:/var/lib/postgresql/data
     ports:
       - '5433:5432'
+    networks:
+      - compass_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: compasscar_app
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: compassuser
+      DB_PASS: compasspass
+      DB_NAME: compasscar_db
+      APP_SECRET: 5317fce602b6a53bea1d22b20ea22393
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
     networks:
       - compass_network
 
